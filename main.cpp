@@ -1,145 +1,277 @@
 #include <iostream>
-#include <string>
-#include <vector>
+#include<string>
 
+#include "Classes.cpp"
 using namespace std;
+struct User {
+    string firstName;
+    string lastName;
+    string username;
+    string password;
 
-// Class definition for managing tours
-class TourManager {
-  private:
-    string tourName;
-    int duration;
-    double price;
-
-  public:
-    // Constructors
-    TourManager() {
-        tourName = "";
-        duration = 0;
-        price = 0.0;
-    }
-    TourManager(string name, int dur, double p) {
-        tourName = name;
-        duration = dur;
-        price = p;
-    }
-
-    // Getters and Setters
-    void setTourName(string name) {
-        tourName = name;
-    }
-    void setDuration(int dur) {
-        duration = dur;
-    }
-    void setPrice(double p) {
-        price = p;
-    }
-    string getTourName() {
-        return tourName;
-    }
-    int getDuration() {
-        return duration;
-    }
-    double getPrice() {
-        return price;
-    }
-
-    // Print function
-    void printTour() {
-        cout << "Tour Name: " << tourName << endl;
-        cout << "Duration: " << duration << " days" << endl;
-        cout << "Price: $" << price << endl;
-    }
+    string birthdate;
+    string address;
 };
 
-// Class definition for managing bookings
-class BookingManager {
-  private:
-    string customerName;
-    int numOfPeople;
-    TourManager tour;
-    string startDate;
+bool login() {
+    string username, password;
+    cout << "Username: ";
+    cin >> username;
+    cout << "Parola: ";
+    cin >> password;
 
-  public:
-    // Constructors
-    BookingManager() {
-        customerName = "";
-        numOfPeople = 0;
-        startDate = "";
-    }
-    BookingManager(string name, int num, TourManager t, string start) {
-        customerName = name;
-        numOfPeople = num;
-        tour = t;
-        startDate = start;
+    // Verificam daca fisierul de utilizatori exista
+    ifstream usersFile("C:/Users/Asus/Desktop/users.txt");
+    if (!usersFile.is_open()) {
+        cout << "Nu s-a putut deschide fisierul!" << endl;
+        return false;
     }
 
-    // Getters and Setters
-    void setCustomerName(string name) {
-        customerName = name;
-    }
-    void setNumOfPeople(int num) {
-        numOfPeople = num;
-    }
-    void setTour(TourManager t) {
-        tour = t;
-    }
-    void setStartDate(string start) {
-        startDate = start;
-    }
-    string getCustomerName() {
-        return customerName;
-    }
-    int getNumOfPeople() {
-        return numOfPeople;
-    }
-    TourManager getTour() {
-        return tour;
-    }
-    string getStartDate() {
-        return startDate;
+    // Verificam daca exista un utilizator cu datele introduse
+    string line;
+    while (getline(usersFile, line)) {
+        if (line.find(username + " " + password) != string::npos) {
+            cout << "Autentificare facuta cu succes!" << endl;
+            usersFile.close();
+            return true;
+        }
     }
 
-    // Print function
-    void printBooking() {
-        cout << "Customer Name: " << customerName << endl;
-        cout << "Number of People: " << numOfPeople << endl;
-        tour.printTour();
-        cout << "Start Date: " << startDate << endl;
+    // Daca nu s-a gasit un utilizator cu datele introduse, afisam un mesaj de eroare
+    cout << "Username sau parola invalida!" << endl;
+    usersFile.close();
+    return false;
+}
+
+void registerUser() {
+    User user;
+
+    cout << "Numele: ";
+    cin >> user.firstName;
+    cout << "Prenumele: ";
+    cin >> user.lastName;
+    cout << "Username: ";
+    cin >> user.username;
+    cout << "Parola: ";
+    cin >> user.password;
+    cout << "Data Nasterii: ";
+    cin >> user.birthdate;
+    cout << "Adresa: ";
+    cin >> user.address;
+
+    // Salvam datele utilizatorului in fisierul "users.txt"
+    ofstream usersFile("C:/Users/Asus/Desktop/users.txt", ios::app);
+    if (!usersFile.is_open()) {
+        cout << "Nu s-a putut deschide fisierul!" << endl;
+        return;
     }
-};
+
+    usersFile << user.firstName << " "
+              << user.lastName << " "
+              << user.username << " "
+              << user.password << " "
+              << user.birthdate << " "
+              << user.address << endl;
+
+    usersFile.close();
+    cout << "Inregistrare facuta cu succes!" << endl;
+}
+
 
 int main() {
-    // Creating tours
-    string destination,date,name;
-
-    int nr,duration;
-    double price;
-    cout<<"Destination:";
-    cin>>destination;
-    cout<<"\nDuration:";
-    cin>>duration;
-    cout<<"\nPrice:";
-    cin>>price;
-    TourManager tour(destination, duration, price);
-
+    int Optiune;
+    cout<<"1.Administrator"<<endl;
+    cout<<"2.Utilizator"<<endl;
+    cout << "Selectati o optiune: ";
+    cin>>Optiune;
+    do{
+        AgentieTurism agentie;
+        vector<Booking> bookings;
+        switch(Optiune)
+        {
+            case 1: {
 
 
-    cout<<"\nName:";
-    cin>>name;
-    cout<<"\nNumber of people:";
-    cin>>nr;
-    cout<<"\nDate:";
-    cin>>date;
+                Meniu_administrator admin;
+                int optiune;
+                do {
+                    admin.afiseaza();
+                    cin >> optiune;
+                    cout << endl;
 
-    // Creating bookings
-    BookingManager booking(name, nr, tour, date);
+                    switch (optiune) {
+                        case 0:
+                            exit(1);
+                        case 1: {
+                            string nume, des;
+                            int pret;
+
+                            cout << "Introduceti numele pachetului turistic: ";
+                            cin >> nume;
+                            cout << "Introduceti descrierea pachetului turistic: ";
+                            cin >> des;
+                            cout << "Introduceti pretul pachetului turistic: ";
+                            cin >> pret;
+
+                            PachetTuristic pachet(nume, des, pret);
+                            agentie.adaugaPachetTuristic(pachet);
+                            cout << "Pachetul turistic a fost adaugat cu succes!" << std::endl << std::endl;
+                            break;
+                        }
+                        case 2:
+                            agentie.afiseazaPachete();
+                            break;
+                        case 3: {
+
+                            string nume, prenume;
+                            cout << "Introduceti numele turistului: " << endl;
+                            cin >> nume;
+                            cout << "Introduceti prenumele turistului: " << endl;
+                            cin >> prenume;
 
 
-    // Printing bookings
-    booking.printBooking();
-    cout << endl;
+                            Turist turist(nume, prenume);
+                            agentie.adaugaTurist(turist);
 
 
-    return 0;
+
+                            break;
+                        }
+                        case 4: {
+                            int  turistId;
+
+
+                            cout << "Introduceti ID-ul turistului pe care doriti sa il stergeti: ";
+                            cin >> turistId;
+                            agentie.stergeTurist(turistId);
+                            break;
+
+
+
+                        }
+                        case 5:
+                            if (bookings.empty()) {
+                                cout << "Nici o rezervare inca." << endl;
+                            } else {
+                                cout << "Rezervari:" << endl;
+                                for (const auto& booking : bookings) {
+                                    cout << "Oferta: " << booking.getOffer().getName() << endl;
+                                    cout << "Cantitate: " << booking.getQuantity() << endl;
+                                    cout << "Pret total: " << booking.getTotalPrice() << endl << endl;
+                                }
+                            }
+
+                            break;
+                        case 6:
+                        {
+                            agentie.afiseazaTuristi();
+                            break;
+                        }
+                        case 7:
+                        {
+                            int id;
+                            cout << "Introduceii ID-ul pachetului de sters: ";
+                            cin >> id;
+                            agentie.stergePachetTuristic(id);
+                            break;
+                        }
+                        default:
+                            cout << "Optiune invalida! Va rugam sa introduceti o optiune valida." << std::endl
+                                 << std::endl;
+                    }
+                } while (optiune != 0);
+                break;
+            }
+            case 2:
+            {
+                cout << "1. Logare" << endl;
+                cout << "2. Inregistrare" << endl;
+                int choice;
+                cin >> choice;
+
+                switch (choice) {
+                    case 1:
+                    {
+                        // Autentificare utilizator
+                        bool authenticated = login();
+
+                        // Daca autentificarea a esuat, inchidem aplicatia
+                        if (!authenticated) {
+                            return 0;
+                        }
+
+
+                        // Afisam meniul principal
+                        int option;
+                        do {
+
+                            cout << "1. Vizualizare oferte turistice" << endl;
+                            cout << "2. Cautare oferte turistice" << endl;
+                            cout << "3. Rezervare pachete turistice" << endl;
+                            cout << "4. Vizualizare istoric rezervari" << endl;
+                            cout << "5. Deconectare" << endl;
+                            cout << "Selectati o optiune: ";
+                            cin >> option;
+
+                            switch (option) {
+                                case 1:
+                                    agentie.afiseazaPachete();
+                                    break;
+                                case 2:
+                                    agentie.CautaPacheteTuristice();
+                                    break;
+                                case 3:
+                                    makeBooking(bookings);
+                                    if (bookings.empty()) {
+                                        cout << "Fara rezervari de salvat." << endl;
+                                    } else {
+
+                                        writeBookingsToJson(bookings, "C:/Users/Asus/Desktop/rezervari.json");
+                                        cout << "Rezervare salvata." << endl;
+                                    }
+                                    break;
+                                case 4:
+                                    if (bookings.empty()) {
+                                        cout << "Fara rezervari." << endl;
+                                    } else {
+                                        cout << "Rezervari:" << endl;
+                                        for (const auto& booking : bookings) {
+                                            cout << "Oferta: " << booking.getOffer().getName() << endl;
+                                            cout << "Cantitate: " << booking.getQuantity() << endl;
+                                            cout << "Pret total: " << booking.getTotalPrice() << endl << endl;
+                                        }
+                                    }
+
+                                    break;
+                                case 5:
+                                    cout << "Deconectare..." << endl;
+                                    break;
+                                default:
+                                    cout << "Optiune invalida!" << endl;
+                                    break;
+                            }
+                        } while (option != 5);
+                    }
+                        break;
+                    case 2:
+                        registerUser();
+                        break;
+                    default:
+                        cout << "Optiune Invalida!" << endl;
+                        break;
+                }
+
+
+            }
+                break;
+            default:
+                cout<<"Optiune Invalida!!";;
+                break;
+        }
+
+    }while (true);
+
+
+
 }
+
