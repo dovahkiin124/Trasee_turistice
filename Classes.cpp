@@ -60,14 +60,9 @@ public:
     PachetTuristic();
 
     const string& getNume() const { return m_nume; }
-    const string& getDestinatie() const { return m_desc; }
+    const string& getDescriere() const { return m_desc; }
     int getPret() const { return m_pret; }
     int getID() const { return m_id; }
-
-
-
-
-
 
 
 private:
@@ -166,7 +161,7 @@ public:
         // Adaugă datele noului pachet în obiectul JSON.
         nlohmann::json j_pachet;
         j_pachet["nume"] = pachet.getNume();
-        j_pachet["descriere"] = pachet.getDestinatie();
+        j_pachet["descriere"] = pachet.getDescriere();
         j_pachet["pret"] = pachet.getPret();
         j_pachet["id"] = pachet.getID();
         j.push_back(j_pachet);
@@ -249,7 +244,7 @@ public:
         for (const auto& j_pachet : j) {
             PachetTuristic pachet(j_pachet["nume"], j_pachet["descriere"], j_pachet["pret"], j_pachet["id"]);
             if (pachet.getNume().find(query) != string::npos ||
-                pachet.getDestinatie().find(query) != string::npos ||
+                pachet.getDescriere().find(query) != string::npos ||
                 to_string(pachet.getPret()).find(query) != string::npos ||
                 to_string(pachet.getID()).find(query) != string::npos) {
                 results.push_back(pachet);
@@ -262,7 +257,7 @@ public:
             cout << "Cauta rezultate:" << endl;
             for (const auto& pachet : results) {
                 cout << "Nume: " << pachet.getNume() << endl;
-                cout << "Destinatie: " << pachet.getDestinatie() << endl;
+                cout << "Destinatie: " << pachet.getDescriere() << endl;
                 cout << "Pret: " << pachet.getPret() << endl;
                 cout << "ID: " << pachet.getID() << endl << endl;
             }
@@ -383,24 +378,6 @@ private:
     int quantity;
 };
 
-
-
-
-// Funcție pentru scrierea rezervărilor în fișierul JSON
-void writeBookingsToJson(const vector<Booking>& bookings, const string& filename) {
-    ofstream file(filename);
-    if (file.is_open()) {
-        json data;
-        for (const auto& booking : bookings) {
-            data.push_back(booking.toJson());
-        }
-        file << data.dump(4);
-    }
-}
-
-
-
-
 // Funcție pentru efectuarea unei rezervări
 void makeBooking(vector<Booking>& bookings) {
     // Încarca ofertele turistice disponibile dintr-un fișier JSON
@@ -440,3 +417,40 @@ void makeBooking(vector<Booking>& bookings) {
 
     cout << "Rezervare facuta!" << endl;
 }
+
+
+// Funcție pentru scrierea rezervărilor în fișierul JSON
+void writeBookingsToJson(const vector<Booking>& bookings, const string& filename) {
+    ofstream file(filename);
+    if (file.is_open()) {
+        json data;
+        for (const auto& booking : bookings) {
+            data.push_back(booking.toJson());
+        }
+        file << data.dump(4);
+    }
+}
+// Funcție pentru citirea rezervărilor din fișierul JSON
+void readBookingsFromJson(vector<Booking>& bookings, const string& filename) {
+    ifstream file(filename);
+    if (file.is_open()) {
+        json data;
+        file >> data;
+
+        for (const auto& bookingData : data) {
+            string offerName = bookingData["Numele Ofertei"];
+            int quantity = bookingData["Cantitatea"];
+            double totalPrice = bookingData["Pret Total"];
+
+            TouristOffer touristOffer(offerName, "", totalPrice, 0);
+            Booking booking(touristOffer, quantity);
+            bookings.push_back(booking);
+        }
+
+        file.close();
+    }
+}
+
+
+
+
