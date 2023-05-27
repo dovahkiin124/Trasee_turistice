@@ -1,3 +1,4 @@
+![Screenshot 2023-05-27 113434](https://github.com/dovahkiin124/Trasee_turistice/assets/118214372/d8171c9d-47f8-43e0-8db1-bde88ea90c9b)
 # Trasee_turistice
 Se oferă două blocuri de cod pentru a reprezenta funcționalitatea unei agenții de turism folosind limbajul de programare C++. Primul bloc de cod se referă la funcționalitățile de autentificare a utilizatorului și de administrare a agenției de turism, cum ar fi adăugarea de pachete turistice, afișarea pachetelor, adăugarea și ștergerea de turiști și gestionarea rezervărilor. Al doilea bloc de cod definește trei clase: Turist, PachetTuristic și AgentieTurism. Clasa Turist reprezintă un turist, clasa PachetTuristic reprezintă un pachet turistic, iar clasa AgentieTurism reprezintă o agenție de turism. În plus, este folosită biblioteca nlohmann/json pentru citirea și scrierea datelor în format JSON.
 
