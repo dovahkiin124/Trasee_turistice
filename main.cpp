@@ -158,6 +158,7 @@ int main() {
 
                                 }
                                 case 5:
+                                    readBookingsFromJson(bookings,"C:/Users/Asus/Desktop/rezervari.json");
                                     if (bookings.empty()) {
                                         cout << "Nici o rezervare inca." << endl;
                                     } else {
@@ -253,6 +254,7 @@ int main() {
                                     }
                                     break;
                                 case 4:
+                                    readBookingsFromJson(bookings,"C:/Users/Asus/Desktop/rezervari.json");
                                     if (bookings.empty()) {
                                         cout << "Fara rezervari." << endl;
                                     } else {
