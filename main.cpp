@@ -1,6 +1,5 @@
 #include <iostream>
 #include<string>
-
 #include "Classes.cpp"
 using namespace std;
 struct User {
@@ -80,6 +79,13 @@ void registerUser() {
 
 int main() {
     int Optiune;
+    std::cout << "  ______                             ______           _      __  _         \n";
+    std::cout << " /_  __/________ _________  ___     /_  __/_  _______(_)____/ /_(_)_______ \n";
+    std::cout << "  / / / ___/ __ `/ ___/ _ \\/ _ \\     / / / / / / ___/ / ___/ __/ / ___/ _ \\ \n";
+    std::cout << " / / / /  / /_/ (__  )  __/  __/    / / / /_/ / /  / (__  ) /_/ / /__/  __/ \n";
+    std::cout << "/_/ /_/   \\__,_/____/\\___/\\___/    /_/  \\__,_/_/  /_/____/\\__/_/\\___/\\___/  \n";
+
+    cout << "=== Administration Menu ===" << endl;
     cout<<"1.Administrator"<<endl;
     cout<<"2.Utilizator"<<endl;
     cout << "Selectati o optiune: ";
@@ -205,8 +211,10 @@ int main() {
             }
             case 2:
             {
+                cout << "=== Log Menu ===" << endl;
                 cout << "1. Logare" << endl;
                 cout << "2. Inregistrare" << endl;
+                cout << "Selectati o optiune: ";
 
 
                 int choice;
@@ -227,7 +235,7 @@ int main() {
                         // Afisam meniul principal
                         int option;
                         do {
-
+                            cout << "=== Main Menu ===" << endl;
                             cout << "1. Vizualizare oferte turistice" << endl;
                             cout << "2. Cautare oferte turistice" << endl;
                             cout << "3. Rezervare pachete turistice" << endl;
