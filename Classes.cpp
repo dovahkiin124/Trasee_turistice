@@ -27,7 +27,7 @@ private:
 };
 int setNextIdp(){
     int i = 1;
-    std::ifstream file("C:/Users/Asus/Desktop/turist.json");
+    std::ifstream file("C:/Users/Asus/Desktop/fturist.json");
     nlohmann::json j;
 
     // Verificăm dacă fișierul există și are cel puțin un element
@@ -64,13 +64,13 @@ public:
     int getPret() const { return m_pret; }
     int getID() const { return m_id; }
 
-
+    //std::vector<Turist> m_turisti;
 private:
     string m_nume;
     string m_desc;
     int m_pret;
     int m_id;
-    std::vector<Turist> m_turisti;
+    //std::vector<Turist> m_turisti;
 
     static int s_nextId;
 };
@@ -118,35 +118,39 @@ public:
 
         // Încarca datele JSON din fișier.
         nlohmann::json j;
-        std::ifstream file("C:/Users/Asus/Desktop/turist.json");
+        std::ifstream file("C:/Users/Asus/Desktop/fturist.json");
         file >> j;
 
         // Elimina datele din obiectul JSON.
         j.erase(std::remove_if(j.begin(), j.end(), [id](const nlohmann::json& j_turist) { return j_turist["id"] == id; }), j.end());
 
         // Scrie obiectul JSON actualizat înapoi în fișier.
-        std::ofstream out("C:/Users/Asus/Desktop/turist.json");
+        std::ofstream out("C:/Users/Asus/Desktop/fturist.json");
         out << std::setw(4) << j << std::endl;
     }
     void adaugaTurist(const Turist& turist) {
         m_turisti.push_back(turist);
 
-        // Creeaza un obiect JSON și populați-l cu datele turistice.
+        // Încarcă conținutul fișierului într-un obiect JSON.
         nlohmann::json j;
-        for (const auto& t : m_turisti) {
-            nlohmann::json j_turist;
-            j_turist["id"] = t.getId();
-            j_turist["nume"] = t.getNume();
-            j_turist["prenume"] = t.getPrenume();
-
-            j.push_back(j_turist);
+        std::ifstream file("C:/Users/Asus/Desktop/fturist.json");
+        if (file.is_open()) {
+            file >> j;
         }
+        // Adaugă datele noului pachet în obiectul JSON.
+        nlohmann::json j_turist;
+        j_turist["id"] = turist.getId();
+        j_turist["nume"] = turist.getNume();
+        j_turist["prenume"] = turist.getPrenume();
+
+        j.push_back(j_turist);
+
 
         // Salveaza obiectul JSON într-un fișier.
-        std::ofstream file("C:/Users/Asus/Desktop/turist.json");
-        file << j.dump();
+        std::ofstream file_out("C:/Users/Asus/Desktop/fturist.json");
+        file_out << j.dump();
     }
-
+    std::vector<Turist> m_turisti;
 
     void adaugaPachetTuristic(const PachetTuristic& pachet) {
         m_pachete.push_back(pachet);
@@ -266,9 +270,9 @@ public:
 
 
     void afiseazaTuristi() {
-        std::ifstream fin("C:/Users/Asus/Desktop/turist.json");
+        std::ifstream fin("C:/Users/Asus/Desktop/fturist.json");
         if (!fin.is_open()) {
-            std::cout << "Eroare la deschiderea fisierului turist.json!" << std::endl;
+            std::cout << "Eroare la deschiderea fisierului fturist.json!" << std::endl;
             return;
         }
 
@@ -309,10 +313,7 @@ public:
         fin.close();
     }
 
-private:
 
-
-    std::vector<Turist> m_turisti;
 
 };
 
@@ -331,6 +332,7 @@ public:
         cout << "6. Afiseaza turisti" <<std::endl;
         cout << "7. Sterge pachet turistic" <<std::endl;
         cout << "0. Iesire" << std::endl;
+        cout << "Selectati o optiune: ";
     }
 };
 
