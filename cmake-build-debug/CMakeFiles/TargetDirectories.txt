@@ -1,0 +1,3 @@
+D:/proecte/Angentie_De_Turism_Remastered/cmake-build-debug/CMakeFiles/Angentie_De_Turism_Remastered.dir
+D:/proecte/Angentie_De_Turism_Remastered/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/proecte/Angentie_De_Turism_Remastered/cmake-build-debug/CMakeFiles/rebuild_cache.dir
